@@ -1,0 +1,61 @@
+version: "3.8"
+
+services:
+  backend1:
+    image: hashicorp/http-echo:latest
+    command:
+      - "-text=Hello from backend1"
+      - "-listen=:9001"
+      - "-status-code=200"
+    networks:
+      - lb-net
+
+  backend2:
+    image: hashicorp/http-echo:latest
+    command:
+      - "-text=Hello from backend2"
+      - "-listen=:9002"
+      - "-status-code=200"
+    networks:
+      - lb-net
+
+  backend3:
+    image: hashicorp/http-echo:latest
+    command:
+      - "-text=Hello from backend3"
+      - "-listen=:9003"
+      - "-status-code=200"
+    networks:
+      - lb-net
+
+  backend4:
+    image: hashicorp/http-echo:latest
+    command:
+      - "-text=Hello from backend4"
+      - "-listen=:9004"
+      - "-status-code=200"
+    networks:
+      - lb-net
+
+  balancer:
+    build:
+      context: ../
+      dockerfile: ./build/Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - balancer-data:/app/data
+    depends_on:
+      - backend1
+      - backend2
+      - backend3
+      - backend4
+    networks:
+      - lb-net
+
+volumes:
+  balancer-data:
+
+networks:
+  lb-net:
+    driver: bridge
