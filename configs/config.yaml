@@ -1,0 +1,26 @@
+listen_port: ":8080"
+servers:
+  - "http://localhost:9001"
+  - "http://localhost:9002"
+  - "http://localhost:9003"
+  - "http://localhost:9004"
+
+# выбор алгоритма балансировки: rr | lc | p2c | adaptive
+algorithm: "adaptive"
+
+# Интервал health-check для P2C
+health_check_interval: 2s
+
+# Параметры общего rate-limитера
+rate_limiter:
+  capacity: 1000
+  refill_rate: 100
+  refill_interval: 1s
+
+# Путь к SQLite-файлу для CRUD-API
+db_path: "./data/clients.db"
+
+# Границы для AdaptiveBalancer (active < low → RR, < high → P2C, иначе LC)
+adaptive:
+  low_threshold: 10
+  high_threshold: 100
